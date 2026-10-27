@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineFilter — Smart Movie Search & Content Filter Engine</title>
+    <meta name="description" content="Discover movies tailored to your exact time, preferred genres, age ratings, actors, plot synopses, and VidAngel or ClearPlay family filtering compatibility.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background glow elements -->
+    <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
+
+    <!-- Header Navigation -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <div class="brand-logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="4"></rect>
+                        <path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="brand-title">Cine<span>Filter</span></h1>
+                    <p class="brand-subtitle">Smart Discovery & Content Filter Engine</p>
+                </div>
+            </div>
+
+            <!-- Database Mode Selector (Live 800k+ vs Curated) -->
+            <div class="db-mode-selector" id="dbModeSelector" role="group" aria-label="Database Mode">
+                <button type="button" id="modeLiveBtn" class="mode-tab active" title="Search live across 800,000+ movies in real time">
+                    <span class="pulse-dot"></span>
+                    <span>Live Database (800k+)</span>
+                </button>
+                <button type="button" id="modeCuratedBtn" class="mode-tab" title="Browse our curated starter library of 57 classics">
+                    <span>Curated Classics</span>
+                </button>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="header-actions">
+                <button id="apiGuideBtn" class="btn btn-glass" title="Learn about IMDb vs TMDB APIs and connection status">
+                    <span class="api-status-dot connected"></span>
+                    <span class="api-btn-text">API &amp; Database Guide</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </button>
+                <button id="surpriseBtn" class="btn btn-primary" title="Pick a random movie matching current filters">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                    </svg>
+                    <span>Surprise Me</span>
+                </button>
+                <button id="mobileFilterToggle" class="btn btn-icon mobile-only" aria-label="Toggle Filters">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="4" y1="6" x2="20" y2="6"></line>
+                        <line x1="8" y1="12" x2="20" y2="12"></line>
+                        <line x1="14" y1="18" x2="20" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-layout">
+        <!-- Sidebar Filters -->
+        <aside class="filter-sidebar" id="filterSidebar">
+            <div class="sidebar-header">
+                <h2>Search Filters</h2>
+                <button id="resetAllFiltersBtn" class="btn-text" title="Reset all filters">Reset All</button>
+                <button id="closeMobileFiltersBtn" class="btn-icon mobile-only" aria-label="Close filters">✕</button>
+            </div>
+
+            <!-- Quick Presets -->
+            <div class="filter-group">
+                <label class="filter-label">Quick Presets</label>
+                <div class="preset-chips">
+                    <button class="preset-chip" data-preset="family-night">Family Night (G/PG, VidAngel)</button>
+                    <button class="preset-chip" data-preset="quick-watch">Quick Watch (&lt; 95 min)</button>
+                    <button class="preset-chip" data-preset="top-rated">Critically Acclaimed (8.5+ ★)</button>
+                    <button class="preset-chip" data-preset="sci-fi-action">Sci-Fi Blockbusters</button>
+                </div>
+            </div>
+
+            <!-- Plot / Synopsis Search -->
+            <div class="filter-group highlight-group">
+                <div class="filter-header-row">
+                    <label class="filter-label" for="plotInput">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                        Plot / Story Description
+                    </label>
+                    <span class="badge-mini">AI Matcher</span>
+                </div>
+                <p class="filter-hint">Describe what happens in the story (jobs, locations, twists):</p>
+                <div class="input-with-clear">
+                    <textarea id="plotInput" rows="2" placeholder="e.g. A man is trapped in an airport and cannot leave, or a chef buys a food truck with his son..."></textarea>
+                    <button id="clearPlotBtn" class="input-clear-btn" aria-label="Clear synopsis" style="display: none;">✕</button>
+                </div>
+
+                <!-- Action Button for Plot Search -->
+                <button type="button" id="findMovieByPlotBtn" class="btn btn-plot-search">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <span>Find Movie from Plot</span>
+                </button>
+
+                <!-- Plot Search Status Indicator -->
+                <div id="plotSearchStatus" class="plot-search-status" style="display: none;"></div>
+
+                <div class="plot-prompts">
+                    <span>Try:</span>
+                    <button type="button" class="plot-tag" data-query="trapped living in airport terminal">Trapped in airport</button>
+                    <button type="button" class="plot-tag" data-query="dreams heist subconscious">Dream heist</button>
+                    <button type="button" class="plot-tag" data-query="rat cooking french chef">Rat chef</button>
+                    <button type="button" class="plot-tag" data-query="astronaut stranded on Mars grows food">Stranded on Mars</button>
+                    <button type="button" class="plot-tag" data-query="chef food truck son road trip">Food truck</button>
+                    <button type="button" class="plot-tag" data-query="serial killer seven deadly sins">Seven deadly sins</button>
+                </div>
+            </div>
+
+            <!-- Available Time / Runtime -->
+            <div class="filter-group">
+                <div class="filter-header-row">
+                    <label class="filter-label" for="runtimeSlider">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        How Long You Have (Runtime)
+                    </label>
+                    <span id="runtimeValue" class="slider-value">Any Time</span>
+                </div>
+                <input type="range" id="runtimeSlider" min="75" max="210" step="5" value="210" aria-label="Maximum Runtime in minutes">
+                <div class="runtime-presets">
+                    <button class="chip-btn" data-runtime="90">&lt; 90 min</button>
+                    <button class="chip-btn" data-runtime="105">&lt; 105 min</button>
+                    <button class="chip-btn" data-runtime="120">&lt; 2 hrs</button>
+                    <button class="chip-btn active" data-runtime="all">Any</button>
+                </div>
+            </div>
+
+            <!-- Genres Checkboxes -->
+            <div class="filter-group">
+                <div class="filter-header-row">
+                    <label class="filter-label">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        Genres (Select One or More)
+                    </label>
+                    <button id="toggleAllGenresBtn" class="btn-text-small">Clear</button>
+                </div>
+                <div class="genre-grid" id="genreContainer">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+
+            <!-- Preferred Age / Content Rating (MPA) -->
+            <div class="filter-group">
+                <label class="filter-label">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    Preferred Age Rating (MPA)
+                </label>
+                <div class="rating-checkboxes" id="ratingContainer">
+                    <label class="checkbox-pill">
+                        <input type="checkbox" name="rating" value="G" checked>
+                        <span class="pill-label rating-g">G</span>
+                    </label>
+                    <label class="checkbox-pill">
+                        <input type="checkbox" name="rating" value="PG" checked>
+                        <span class="pill-label rating-pg">PG</span>
+                    </label>
+                    <label class="checkbox-pill">
+                        <input type="checkbox" name="rating" value="PG-13" checked>
+                        <span class="pill-label rating-pg13">PG-13</span>
+                    </label>
+                    <label class="checkbox-pill">
+                        <input type="checkbox" name="rating" value="R" checked>
+                        <span class="pill-label rating-r">R</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Filtering Services: VidAngel / ClearPlay -->
+            <div class="filter-group filtering-services-card">
+                <div class="filter-header-row">
+                    <label class="filter-label" for="filterServiceToggle">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                        </svg>
+                        VidAngel &amp; ClearPlay Filtering
+                    </label>
+                    <span class="badge-service">Family Tech</span>
+                </div>
+                <p class="filter-hint">Find movies that can be customized to mute profanity, skip graphic violence or nudity on streaming.</p>
+                
+                <label class="switch-control">
+                    <input type="checkbox" id="filterServiceToggle">
+                    <span class="switch-slider"></span>
+                    <span class="switch-text">Only show VidAngel / ClearPlay filterable titles</span>
+                </label>
+
+                <!-- Detailed Family Content Thresholds -->
+                <div class="content-tolerances" id="contentTolerances">
+                    <div class="tolerance-row">
+                        <span class="tolerance-label">Profanity Max:</span>
+                        <select id="maxProfanity" class="select-styled" aria-label="Maximum Profanity Level">
+                            <option value="any">Any (Filterable)</option>
+                            <option value="Moderate">Moderate &amp; Below</option>
+                            <option value="Mild">Mild &amp; Below</option>
+                            <option value="None">None (Zero Cursing)</option>
+                        </select>
+                    </div>
+                    <div class="tolerance-row">
+                        <span class="tolerance-label">Violence Max:</span>
+                        <select id="maxViolence" class="select-styled" aria-label="Maximum Violence Level">
+                            <option value="any">Any (Filterable)</option>
+                            <option value="Moderate">Moderate &amp; Below</option>
+                            <option value="Mild">Mild &amp; Below</option>
+                            <option value="None">None (Non-violent)</option>
+                        </select>
+                    </div>
+                    <div class="tolerance-row">
+                        <span class="tolerance-label">Nudity / Sex Max:</span>
+                        <select id="maxNudity" class="select-styled" aria-label="Maximum Nudity Level">
+                            <option value="any">Any (Filterable)</option>
+                            <option value="Moderate">Moderate &amp; Below</option>
+                            <option value="Mild">Mild &amp; Below</option>
+                            <option value="None">None (Zero Nudity)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Specific Actor(s) -->
+            <div class="filter-group">
+                <label class="filter-label" for="actorInput">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Specify Actor(s)
+                </label>
+                <div class="input-with-clear">
+                    <input type="text" id="actorInput" placeholder="e.g. Tom Hanks, Leonardo DiCaprio..." autocomplete="off">
+                    <button id="clearActorBtn" class="input-clear-btn" aria-label="Clear actor" style="display: none;">✕</button>
+                </div>
+                <div class="actor-suggestions" id="actorSuggestions">
+                    <button type="button" class="actor-tag" data-actor="Tom Hanks">Tom Hanks</button>
+                    <button type="button" class="actor-tag" data-actor="Leonardo DiCaprio">Leonardo DiCaprio</button>
+                    <button type="button" class="actor-tag" data-actor="Emma Stone">Emma Stone</button>
+                    <button type="button" class="actor-tag" data-actor="Morgan Freeman">Morgan Freeman</button>
+                    <button type="button" class="actor-tag" data-actor="Harrison Ford">Harrison Ford</button>
+                    <button type="button" class="actor-tag" data-actor="Scarlett Johansson">Scarlett Johansson</button>
+                    <button type="button" class="actor-tag" data-actor="Matt Damon">Matt Damon</button>
+                    <button type="button" class="actor-tag" data-actor="Robert Downey Jr.">Robert Downey Jr.</button>
+                </div>
+            </div>
+
+            <!-- Release Year / Era -->
+            <div class="filter-group">
+                <div class="filter-header-row">
+                    <label class="filter-label" for="exactYearInput">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        Release Year or Decade
+                    </label>
+                </div>
+                <div class="decade-selector" id="decadeContainer">
+                    <button class="chip-btn active" data-decade="all">All Eras</button>
+                    <button class="chip-btn" data-decade="2020s">2020s</button>
+                    <button class="chip-btn" data-decade="2010s">2010s</button>
+                    <button class="chip-btn" data-decade="2000s">2000s</button>
+                    <button class="chip-btn" data-decade="1990s">90s</button>
+                    <button class="chip-btn" data-decade="1980s">80s</button>
+                    <button class="chip-btn" data-decade="Classic">Classics</button>
+                </div>
+                <div class="input-inline-row">
+                    <input type="number" id="exactYearInput" min="1930" max="2030" placeholder="Or exact year (e.g. 1994)">
+                    <button id="clearExactYearBtn" class="btn-text-small" style="display:none;">Clear</button>
+                </div>
+            </div>
+
+            <!-- Minimum Rating Score Slider -->
+            <div class="filter-group">
+                <div class="filter-header-row">
+                    <label class="filter-label" for="minScoreSlider">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        Minimum Score (IMDb / Rating)
+                    </label>
+                    <span id="minScoreValue" class="slider-value">Any Score</span>
+                </div>
+                <input type="range" id="minScoreSlider" min="0" max="9.0" step="0.5" value="0" aria-label="Minimum Score">
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <!-- Search & Controls Bar -->
+            <div class="top-controls-bar">
+                <div class="title-search-wrapper">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="search" id="titleSearchInput" placeholder="Search by title (e.g. Inception, The Terminal, Jurassic Park, Dune)..." autocomplete="off">
+                    <button id="clearTitleBtn" class="input-clear-btn" aria-label="Clear title search" style="display:none;">✕</button>
+                </div>
+
+                <div class="sort-and-count">
+                    <div class="results-count" id="resultsCount">Connecting live database...</div>
+                    <div class="sort-wrapper">
+                        <label for="sortSelect">Sort:</label>
+                        <select id="sortSelect" class="select-styled">
+                            <option value="relevance">Most Relevant / Best Match</option>
+                            <option value="score-desc">Highest Rated (IMDb / Score)</option>
+                            <option value="runtime-asc">Shortest Watch Time</option>
+                            <option value="runtime-desc">Longest Watch Time</option>
+                            <option value="year-desc">Newest Release Year</option>
+                            <option value="year-asc">Oldest Release Year</option>
+                            <option value="title-asc">Title (A - Z)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plot Results Banner -->
+            <div class="plot-results-banner" id="plotResultsBanner" style="display: none;">
+                <div class="plot-banner-text">
+                    <span class="plot-banner-icon">✨</span>
+                    <span>Matching plot description: <strong id="plotBannerQuery"></strong></span>
+                </div>
+                <button id="clearPlotBannerBtn" class="btn-text-small">Clear Plot Search ✕</button>
+            </div>
+
+            <!-- Active Filter Badges Bar -->
+            <div class="active-filters-bar" id="activeFiltersBar" style="display: none;">
+                <span class="active-filters-title">Active Filters:</span>
+                <div class="active-filters-list" id="activeFiltersList"></div>
+                <button id="clearAllChipsBtn" class="btn-text-small">Clear All</button>
+            </div>
+
+            <!-- Informational Banner for TMDB vs IMDb -->
+            <div class="info-alert" id="apiInfoAlert">
+                <div class="alert-icon">🚀</div>
+                <div class="alert-body">
+                    <strong>Live Database Mode Active:</strong>
+                    Connected to <strong>The Movie Database (TMDB)</strong> and <strong>OMDb (IMDb)</strong> with over <strong>800,000+ real movies</strong>! 
+                    Filter by exact runtime, age rating, and genres, or describe any plot in your own words to find the movie.
+                </div>
+                <button class="alert-close-btn" id="dismissAlertBtn" aria-label="Dismiss alert">✕</button>
+            </div>
+
+            <!-- Movies Grid -->
+            <div class="movies-grid" id="moviesGrid">
+                <!-- Movie cards populated dynamically via JS -->
+            </div>
+
+            <!-- Load More Container for Live Browsing -->
+            <div class="load-more-container" id="loadMoreContainer" style="display: none;">
+                <button id="loadMoreBtn" class="btn btn-secondary btn-load-more">
+                    <span>Load More Movies (Page <span id="nextPageNum">2</span>)</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">🎬</div>
+                <h3 id="emptyTitle">No Movies Match Your Exact Criteria</h3>
+                <p id="emptyMessage">Try loosening your runtime limit, selecting additional genres, or resetting your plot keywords.</p>
+                <button id="emptyResetBtn" class="btn btn-primary">Reset All Filters</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Movie Detail Modal Dialog (Modern top-layer dialog) -->
+    <dialog class="movie-dialog" id="movieDetailDialog" aria-labelledby="modalTitle">
+        <div class="dialog-content">
+            <button class="dialog-close-btn" id="closeDialogBtn" aria-label="Close modal">✕</button>
+            
+            <div class="dialog-hero" id="modalHero">
+                <div class="dialog-hero-overlay"></div>
+                <div class="dialog-hero-meta">
+                    <div class="dialog-badges" id="modalBadges"></div>
+                    <h2 id="modalTitle" class="modal-movie-title">Movie Title</h2>
+                    <div class="modal-quick-stats" id="modalQuickStats"></div>
+                </div>
+            </div>
+
+            <div class="dialog-body">
+                <div class="modal-columns">
+                    <div class="modal-poster-col">
+                        <img id="modalPoster" src="" alt="Movie Poster" class="modal-poster-img">
+                    </div>
+                    <div class="modal-info-col">
+                        <div class="modal-section">
+                            <h3>Plot Synopsis</h3>
+                            <p id="modalSynopsis" class="modal-synopsis-text"></p>
+                        </div>
+
+                        <div class="modal-section">
+                            <h3>Key Cast &amp; Crew</h3>
+                            <p><strong>Director:</strong> <span id="modalDirector"></span></p>
+                            <div class="modal-cast-tags" id="modalCastTags"></div>
+                        </div>
+
+                        <div class="modal-section filtering-highlight-box">
+                            <div class="filtering-box-header">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                                <h4>VidAngel &amp; ClearPlay Family Filtering Guide</h4>
+                            </div>
+                            <p id="modalFilterSummary" class="filter-summary-text"></p>
+                            
+                            <!-- Content breakdown meters -->
+                            <div class="content-meters-grid" id="modalContentMeters"></div>
+
+                            <div class="service-action-buttons">
+                                <a id="vidangelLinkBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-vidangel">
+                                    <span>Check on VidAngel ↗</span>
+                                </a>
+                                <a id="clearplayLinkBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-clearplay">
+                                    <span>Check on ClearPlay ↗</span>
+                                </a>
+                                <a id="imdbParentsLinkBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-imdb">
+                                    <span>IMDb Parents Guide ↗</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer-actions">
+                            <a id="imdbLinkBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18.7 3H5.3A2.3 2.3 0 0 0 3 5.3v13.4A2.3 2.3 0 0 0 5.3 21h13.4a2.3 2.3 0 0 0 2.3-2.3V5.3A2.3 2.3 0 0 0 18.7 3zM7.2 16.5H5.4V7.5h1.8v9zm4.6 0H10l-1.6-4.9V16.5H6.9V7.5h1.8l1.6 4.9V7.5h1.5v9zm4.8-1.5c0 .9-.6 1.5-1.5 1.5h-2.1V7.5h2.1c.9 0 1.5.6 1.5 1.5v6zm3.3 1.5h-1.5l-1.5-4.8V16.5h-1.5V7.5h1.8l1.3 4.4 1.3-4.4h1.8l-1.7 4.7 1.7 4.3z"/>
+                                </svg>
+                                <span>View on IMDb</span>
+                            </a>
+                            <a id="trailerLinkBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-glass">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                                <span>Watch Trailer</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- API & Database Info Guide Modal -->
+    <dialog class="movie-dialog api-guide-dialog" id="apiGuideDialog">
+        <div class="dialog-content">
+            <button class="dialog-close-btn" id="closeApiGuideBtn" aria-label="Close guide">✕</button>
+            <div class="dialog-body">
+                <h2>Movie Database API &amp; Architecture Guide</h2>
+                <p class="guide-subtitle">Answering your questions on IMDb, TMDB, and live movie discovery</p>
+
+                <div class="guide-cards-grid">
+                    <div class="guide-card">
+                        <div class="guide-card-icon">⚠️</div>
+                        <h3>1. The Truth About the IMDb API</h3>
+                        <p><strong>IMDb (Internet Movie Database)</strong> is owned by Amazon and does <em>not</em> provide an open, free REST API. Official commercial licenses cost upwards of thousands of dollars per month via AWS Data Exchange. Third-party scraping APIs (on RapidAPI) exist, but have restrictive daily limits (often ~100 calls) and frequently break.</p>
+                    </div>
+
+                    <div class="guide-card highlight-card">
+                        <div class="guide-card-icon">🚀</div>
+                        <h3>2. The Live Solution: TMDB + OMDb</h3>
+                        <p>This app is connected directly to <strong>The Movie Database (TMDB)</strong> and <strong>OMDb</strong> out of the box, granting you access to over <strong>800,000+ real movies</strong> with:</p>
+                        <ul>
+                            <li><strong>Exact Runtime Filtering:</strong> <code>with_runtime.lte</code></li>
+                            <li><strong>Multi-Genre Checkboxes:</strong> <code>with_genres=28,35</code></li>
+                            <li><strong>MPA Age Certifications:</strong> <code>certification.lte=PG-13</code></li>
+                            <li><strong>Actor &amp; Year:</strong> <code>with_cast</code> &amp; <code>primary_release_year</code></li>
+                            <li><strong>IMDb Integration:</strong> Official IMDb IDs and direct links for every title!</li>
+                        </ul>
+                    </div>
+
+                    <div class="guide-card">
+                        <div class="guide-card-icon">🛡️</div>
+                        <h3>3. VidAngel &amp; ClearPlay Integration</h3>
+                        <p>VidAngel and ClearPlay filter streaming platforms (Apple TV+, Netflix, Amazon Prime). Since they don't have public APIs, this application:</p>
+                        <ul>
+                            <li>Provides 1-click direct title searches on VidAngel and ClearPlay</li>
+                            <li>Maintains curated filter tags and content sensitivity meters (profanity, violence, nudity, substances)</li>
+                            <li>Links directly to IMDb's official Parents Guide for detailed scene-by-scene content advisories</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="api-key-config-box">
+                    <h3>Custom TMDB API Key (Optional)</h3>
+                    <p>CineFilter already includes a built-in live API connection so you can search immediately. If you have your own personal TMDB API key, you can enter it below:</p>
+                    <div class="api-input-row">
+                        <input type="text" id="tmdbApiKeyInput" placeholder="Enter custom TMDB v3 API Key (32 characters)...">
+                        <button id="saveApiKeyBtn" class="btn btn-primary">Save Key</button>
+                        <button id="clearApiKeyBtn" class="btn btn-secondary">Reset to Default</button>
+                    </div>
+                    <div id="apiKeyFeedback" class="api-feedback"></div>
+                    <p class="get-key-link">
+                        Need a personal key? It's free at <a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noopener noreferrer">themoviedb.org/settings/api ↗</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Curated Data & App Script -->
+    <script src="movies-data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

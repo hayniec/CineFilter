@@ -1,0 +1,14 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Logs & temp files
+*.log
+.temp*
+__pycache__/
+*.pyc
+
+# Local environment / IDE
+.vscode/
+.idea/
