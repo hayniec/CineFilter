@@ -1511,6 +1511,266 @@ function pickRandomMovie() {
     openMovieDetail(randomPick);
 }
 
+
+/**
+ * ==========================================================================
+ * Streaming Availability & Watch Providers (Powered by JustWatch & TMDB)
+ * ==========================================================================
+ */
+
+const STREAMING_CACHE = new Map();
+let currentModalMovie = null;
+
+function escapeHtml(str) {
+    if (!str) return "";
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+/**
+ * Fetch Watch Providers from TMDB
+ */
+async function fetchWatchProviders(movie) {
+    if (!movie) return null;
+
+    let tmdbId = movie.tmdbId;
+
+    // If tmdbId not present, try finding by imdbId
+    if (!tmdbId && movie.imdbId) {
+        try {
+            const findUrl = `https://api.themoviedb.org/3/find/${movie.imdbId}?external_source=imdb_id&api_key=${CONFIG.TMDB_API_KEY}`;
+            const findRes = await fetch(findUrl);
+            if (findRes.ok) {
+                const findData = await findRes.json();
+                if (findData.movie_results && findData.movie_results.length > 0) {
+                    tmdbId = findData.movie_results[0].id;
+                    movie.tmdbId = tmdbId;
+                }
+            }
+        } catch (e) {
+            console.warn("Error resolving TMDB ID from IMDb:", e);
+        }
+    }
+
+    // If still not found, try searching by title and year
+    if (!tmdbId && movie.title) {
+        try {
+            const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${CONFIG.TMDB_API_KEY}&query=${encodeURIComponent(movie.title)}&year=${movie.year || ""}`;
+            const searchRes = await fetch(searchUrl);
+            if (searchRes.ok) {
+                const searchData = await searchRes.json();
+                if (searchData.results && searchData.results.length > 0) {
+                    tmdbId = searchData.results[0].id;
+                    movie.tmdbId = tmdbId;
+                }
+            }
+        } catch (e) {
+            console.warn("Error resolving TMDB ID from title:", e);
+        }
+    }
+
+    if (!tmdbId) return null;
+
+    if (STREAMING_CACHE.has(tmdbId)) {
+        return STREAMING_CACHE.get(tmdbId);
+    }
+
+    try {
+        const url = `https://api.themoviedb.org/3/movie/${tmdbId}/watch/providers?api_key=${CONFIG.TMDB_API_KEY}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`TMDB providers returned ${res.status}`);
+        const data = await res.json();
+        const results = data.results || {};
+        STREAMING_CACHE.set(tmdbId, results);
+        return results;
+    } catch (err) {
+        console.error("Failed to fetch streaming providers:", err);
+        return null;
+    }
+}
+
+/**
+ * Generate platform-specific search or watch URL
+ */
+function getProviderSearchUrl(providerName, movieTitle) {
+    const cleanTitle = encodeURIComponent(movieTitle);
+    const p = (providerName || "").toLowerCase();
+    if (p.includes("netflix")) return `https://www.netflix.com/search?q=${cleanTitle}`;
+    if (p.includes("prime") || p.includes("amazon")) return `https://www.amazon.com/s?k=${cleanTitle}&i=instant-video`;
+    if (p.includes("disney")) return `https://www.disneyplus.com/search?q=${cleanTitle}`;
+    if (p.includes("apple tv") || p.includes("apple")) return `https://tv.apple.com/search?term=${cleanTitle}`;
+    if (p.includes("max") || p.includes("hbo")) return `https://play.max.com/search?q=${cleanTitle}`;
+    if (p.includes("hulu")) return `https://www.hulu.com/search?q=${cleanTitle}`;
+    if (p.includes("paramount")) return `https://www.paramountplus.com/search/?q=${cleanTitle}`;
+    if (p.includes("peacock")) return `https://www.peacocktv.com/search?q=${cleanTitle}`;
+    if (p.includes("tubi")) return `https://tubitv.com/search/${cleanTitle}`;
+    if (p.includes("pluto")) return `https://pluto.tv/search/details/movies/${cleanTitle}`;
+    if (p.includes("youtube") || p.includes("google")) return `https://www.youtube.com/results?search_query=${encodeURIComponent(movieTitle + " full movie")}`;
+    if (p.includes("fandango") || p.includes("vudu")) return `https://www.vudu.com/content/movies/search?searchString=${cleanTitle}`;
+    return `https://www.google.com/search?q=watch+${cleanTitle}+movie+on+${encodeURIComponent(providerName)}`;
+}
+
+/**
+ * Render Streaming Availability inside Modal
+ */
+async function renderStreamingSection(movie, regionCode = "US") {
+    const container = document.getElementById("modalStreamingContent");
+    if (!container) return;
+
+    // Show Loading state
+    container.innerHTML = `
+        <div class="streaming-loading">
+            <span class="streaming-spinner"></span>
+            <span>Checking live streaming availability across Netflix, Prime, Disney+, Max &amp; more...</span>
+        </div>
+    `;
+
+    const allProviders = await fetchWatchProviders(movie);
+
+    // Guard against race conditions if modal closed or changed
+    if (!currentModalMovie || currentModalMovie.id !== movie.id) return;
+
+    const regionData = allProviders ? allProviders[regionCode] : null;
+
+    if (!regionData) {
+        container.innerHTML = `
+            <div class="streaming-empty">
+                <p>No direct streaming providers reported for "${escapeHtml(movie.title)}" in this region (${regionCode}).</p>
+                <a href="https://www.google.com/search?q=where+to+watch+${encodeURIComponent(movie.title + " " + movie.year)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-glass">
+                    Search Where to Stream on Google ↗
+                </a>
+            </div>
+        `;
+        return;
+    }
+
+    const flatrate = regionData.flatrate || [];
+    const free = [...(regionData.free || []), ...(regionData.ads || [])];
+    
+    // Deduplicate rent and buy
+    const rent = regionData.rent || [];
+    const buy = regionData.buy || [];
+    const rentBuyMap = new Map();
+    [...rent, ...buy].forEach(p => {
+        if (!rentBuyMap.has(p.provider_id)) {
+            rentBuyMap.set(p.provider_id, p);
+        }
+    });
+    const rentBuyList = Array.from(rentBuyMap.values()).slice(0, 6);
+
+    const justWatchLink = regionData.link || (movie.tmdbId ? `https://www.themoviedb.org/movie/${movie.tmdbId}/watch?locale=${regionCode}` : "https://www.justwatch.com");
+
+    let html = "";
+
+    // Check VidAngel / ClearPlay compatibility synergy
+    const allStreamingNames = [...flatrate, ...free].map(p => p.provider_name.toLowerCase());
+    const compatibleServices = [];
+    if (allStreamingNames.some(n => n.includes("netflix"))) compatibleServices.push("Netflix");
+    if (allStreamingNames.some(n => n.includes("prime") || n.includes("amazon"))) compatibleServices.push("Prime Video");
+    if (allStreamingNames.some(n => n.includes("disney"))) compatibleServices.push("Disney+");
+    if (allStreamingNames.some(n => n.includes("apple"))) compatibleServices.push("Apple TV+");
+
+    if (compatibleServices.length > 0) {
+        html += `
+            <div class="streaming-compatibility-alert">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span><strong>Filter Compatible:</strong> Streaming on <strong>${compatibleServices.join(", ")}</strong> — ready to filter with VidAngel &amp; ClearPlay!</span>
+            </div>
+        `;
+    }
+
+    let hasAnyOptions = false;
+
+    // 1. Subscription Streaming (Flatrate)
+    if (flatrate.length > 0) {
+        hasAnyOptions = true;
+        html += `
+            <div class="streaming-group">
+                <div class="streaming-group-header">
+                    <span class="streaming-group-label">Stream (Subscription)</span>
+                </div>
+                <div class="streaming-provider-grid">
+                    ${flatrate.map(p => `
+                        <a href="${getProviderSearchUrl(p.provider_name, movie.title)}" target="_blank" rel="noopener noreferrer" class="provider-pill" title="Watch on ${escapeHtml(p.provider_name)}">
+                            <img src="${CONFIG.TMDB_IMAGE_BASE}${p.logo_path}" alt="${escapeHtml(p.provider_name)}" class="provider-logo" onerror="this.style.display='none'">
+                            <span class="provider-name">${escapeHtml(p.provider_name)}</span>
+                            <span class="provider-tier-badge tier-sub">Stream ↗</span>
+                        </a>
+                    `).join("")}
+                </div>
+            </div>
+        `;
+    }
+
+    // 2. Free with Ads
+    if (free.length > 0) {
+        hasAnyOptions = true;
+        html += `
+            <div class="streaming-group">
+                <div class="streaming-group-header">
+                    <span class="streaming-group-label">Free with Ads</span>
+                </div>
+                <div class="streaming-provider-grid">
+                    ${free.map(p => `
+                        <a href="${getProviderSearchUrl(p.provider_name, movie.title)}" target="_blank" rel="noopener noreferrer" class="provider-pill" title="Watch free on ${escapeHtml(p.provider_name)}">
+                            <img src="${CONFIG.TMDB_IMAGE_BASE}${p.logo_path}" alt="${escapeHtml(p.provider_name)}" class="provider-logo" onerror="this.style.display='none'">
+                            <span class="provider-name">${escapeHtml(p.provider_name)}</span>
+                            <span class="provider-tier-badge tier-free">Free ↗</span>
+                        </a>
+                    `).join("")}
+                </div>
+            </div>
+        `;
+    }
+
+    // 3. Digital Rent or Buy
+    if (rentBuyList.length > 0) {
+        hasAnyOptions = true;
+        html += `
+            <div class="streaming-group">
+                <div class="streaming-group-header">
+                    <span class="streaming-group-label">Rent or Buy</span>
+                </div>
+                <div class="streaming-provider-grid">
+                    ${rentBuyList.map(p => `
+                        <a href="${getProviderSearchUrl(p.provider_name, movie.title)}" target="_blank" rel="noopener noreferrer" class="provider-pill" title="Rent/Buy on ${escapeHtml(p.provider_name)}">
+                            <img src="${CONFIG.TMDB_IMAGE_BASE}${p.logo_path}" alt="${escapeHtml(p.provider_name)}" class="provider-logo" onerror="this.style.display='none'">
+                            <span class="provider-name">${escapeHtml(p.provider_name)}</span>
+                            <span class="provider-tier-badge tier-rent">Rent / Buy ↗</span>
+                        </a>
+                    `).join("")}
+                </div>
+            </div>
+        `;
+    }
+
+    if (!hasAnyOptions) {
+        html += `
+            <div class="streaming-empty">
+                <p>No subscription or digital streaming currently available in ${regionCode}.</p>
+                <a href="https://www.google.com/search?q=where+to+watch+${encodeURIComponent(movie.title + " " + movie.year)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-glass">
+                    Check Streaming Availability on Google ↗
+                </a>
+            </div>
+        `;
+    } else {
+        html += `
+            <div class="streaming-footer-note">
+                <span>Streaming data verified by JustWatch via TMDB</span>
+                <a href="${justWatchLink}" target="_blank" rel="noopener noreferrer">All Offers &amp; Pricing ↗</a>
+            </div>
+        `;
+    }
+
+    container.innerHTML = html;
+}
+
 /**
  * Open Movie Detail Modal
  */
@@ -1601,6 +1861,12 @@ function openMovieDetail(movie) {
 
     document.getElementById('trailerLinkBtn').href = `https://www.youtube.com/results?search_query=${encodeURIComponent(movie.title + ' ' + movie.year + ' official trailer')}`;
 
+    // Set active modal movie & fetch streaming availability
+    currentModalMovie = movie;
+    const regionSelect = document.getElementById('streamingRegionSelect');
+    const region = regionSelect ? regionSelect.value : 'US';
+    renderStreamingSection(movie, region);
+
     // Show Dialog
     if (typeof dialog.showModal === 'function') {
         dialog.showModal();
@@ -1623,6 +1889,16 @@ function setupModals() {
     if (movieDialog) {
         movieDialog.addEventListener('click', (e) => {
             if (e.target === movieDialog) closeDialog(movieDialog);
+        });
+    }
+
+    // Streaming Region Selector Listener
+    const streamingRegionSelect = document.getElementById('streamingRegionSelect');
+    if (streamingRegionSelect) {
+        streamingRegionSelect.addEventListener('change', () => {
+            if (currentModalMovie) {
+                renderStreamingSection(currentModalMovie, streamingRegionSelect.value);
+            }
         });
     }
 

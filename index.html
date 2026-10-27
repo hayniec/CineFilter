@@ -431,6 +431,36 @@
                             <div class="modal-cast-tags" id="modalCastTags"></div>
                         </div>
 
+                        <!-- Where to Stream & Watch Section -->
+                        <div class="modal-section streaming-highlight-box" id="modalStreamingSection">
+                            <div class="streaming-box-header">
+                                <div class="streaming-title-wrap">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="streaming-icon">
+                                        <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+                                        <polyline points="17 2 12 7 7 2"></polyline>
+                                    </svg>
+                                    <h4>Where to Stream &amp; Watch</h4>
+                                </div>
+                                <div class="streaming-region-wrapper">
+                                    <label for="streamingRegionSelect" class="streaming-region-label">Region:</label>
+                                    <select id="streamingRegionSelect" class="streaming-region-select" aria-label="Select streaming region">
+                                        <option value="US" selected>🇺🇸 United States</option>
+                                        <option value="CA">🇨🇦 Canada</option>
+                                        <option value="GB">🇬🇧 United Kingdom</option>
+                                        <option value="AU">🇦🇺 Australia</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Dynamic Content Container populated by app.js -->
+                            <div id="modalStreamingContent" class="streaming-content-container">
+                                <div class="streaming-loading">
+                                    <span class="streaming-spinner"></span>
+                                    <span>Checking live streaming availability...</span>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="modal-section filtering-highlight-box">
                             <div class="filtering-box-header">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

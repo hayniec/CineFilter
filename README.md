@@ -29,6 +29,18 @@
 
 ---
 
+## 📺 Live Streaming Availability & Where to Watch (JustWatch / TMDB)
+
+When you click on any movie card (curated or live from the 800,000+ title catalog), CineFilter queries live streaming provider metadata:
+- **Subscription Streaming:** Real-time provider badges with high-res logos and direct links for **Netflix**, **Amazon Prime Video**, **Disney+**, **Max**, **Apple TV+**, **Paramount+**, **Hulu**, and **Peacock**.
+- **Free with Ads:** Dedicated badges for free ad-supported streaming platforms (**Tubi**, **Pluto TV**, **Kanopy**, **Plex**, etc.).
+- **Digital Rental & Purchase:** Quick links for **Apple TV Store**, **Amazon Video**, **Google Play**, **YouTube**, and **Fandango at Home**.
+- **Filtering Synergy Alert:** Instantly displays a compatibility badge if the title is streaming on a platform supported by **VidAngel** (Netflix, Prime Video, Apple TV+) or **ClearPlay** (Amazon, Apple TV, Disney+, Netflix).
+- **Multi-Region Support:** Seamless region toggle between 🇺🇸 United States, 🇨🇦 Canada, 🇬🇧 United Kingdom, and 🇦🇺 Australia.
+- **Deep Links:** Click any streaming provider badge to jump straight to that platform, or view complete pricing tiers directly on JustWatch.
+
+---
+
 ## 🛡️ VidAngel & ClearPlay Content Filtering Integration
 
 **VidAngel** and **ClearPlay** are family-focused filtering services that mute profanity and skip graphic violence, nudity, or disturbing scenes across streaming platforms (Apple TV+, Netflix, Amazon Prime).

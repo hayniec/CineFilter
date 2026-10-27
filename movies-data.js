@@ -1,5 +1,5 @@
 // Curated Movie Catalog for CineFilter
-// Bundled with rich metadata, cast, synopsis, runtime, age ratings, and VidAngel / ClearPlay filter status
+// Bundled with rich metadata, cast, synopsis, runtime, age ratings, TMDB IDs, and VidAngel / ClearPlay filter status
 const MOVIES_DATABASE = [
   {
     "id": "the-dark-knight",
@@ -36,7 +36,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Filters available for comic-book violence, hospital explosions, knife threats, and mild profanity."
+    "filterSummary": "Filters available for comic-book violence, hospital explosions, knife threats, and mild profanity.",
+    "tmdbId": 155
   },
   {
     "id": "inception",
@@ -74,7 +75,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Action gunplay, zero-gravity fistfights, and some mild swearing can be seamlessly filtered."
+    "filterSummary": "Action gunplay, zero-gravity fistfights, and some mild swearing can be seamlessly filtered.",
+    "tmdbId": 27205
   },
   {
     "id": "interstellar",
@@ -110,7 +112,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Occasional strong language and perilous space distress scenes can be muted or skipped."
+    "filterSummary": "Occasional strong language and perilous space distress scenes can be muted or skipped.",
+    "tmdbId": 157336
   },
   {
     "id": "toy-story",
@@ -147,7 +150,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Fully family friendly. Very mild toy peril (Sid's scary mutant toys)."
+    "filterSummary": "Fully family friendly. Very mild toy peril (Sid's scary mutant toys).",
+    "tmdbId": 862
   },
   {
     "id": "finding-nemo",
@@ -183,7 +187,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Excellent for all ages. Minor underwater peril with Bruce the shark and anglerfish."
+    "filterSummary": "Excellent for all ages. Minor underwater peril with Bruce the shark and anglerfish.",
+    "tmdbId": 12
   },
   {
     "id": "knives-out",
@@ -222,7 +227,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Filters strong language (F-words) and brief bloody cut imagery while keeping the witty mystery intact."
+    "filterSummary": "Filters strong language (F-words) and brief bloody cut imagery while keeping the witty mystery intact.",
+    "tmdbId": 546554
   },
   {
     "id": "back-to-the-future",
@@ -256,7 +262,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Mild 80s profanity and teen bullying can be filtered."
+    "filterSummary": "Mild 80s profanity and teen bullying can be filtered.",
+    "tmdbId": 105
   },
   {
     "id": "jurassic-park",
@@ -294,7 +301,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "T-Rex and raptor suspense, dinosaur attacks, and minor profanity can be filtered."
+    "filterSummary": "T-Rex and raptor suspense, dinosaur attacks, and minor profanity can be filtered.",
+    "tmdbId": 329
   },
   {
     "id": "the-truman-show",
@@ -328,7 +336,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Very mild content; filters available for mild profanity and subtle suggestive humor."
+    "filterSummary": "Very mild content; filters available for mild profanity and subtle suggestive humor.",
+    "tmdbId": 37165
   },
   {
     "id": "groundhog-day",
@@ -361,7 +370,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Filters for comedic suicide attempts, mild innuendo, and mild profanity."
+    "filterSummary": "Filters for comedic suicide attempts, mild innuendo, and mild profanity.",
+    "tmdbId": 137
   },
   {
     "id": "the-princess-bride",
@@ -399,7 +409,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Swashbuckling swordplay and mild fairytale fantasy peril; great for family viewing."
+    "filterSummary": "Swashbuckling swordplay and mild fairytale fantasy peril; great for family viewing.",
+    "tmdbId": 2493
   },
   {
     "id": "la-la-land",
@@ -434,7 +445,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Mutes a couple of curse words and social party drinking."
+    "filterSummary": "Mutes a couple of curse words and social party drinking.",
+    "tmdbId": 313369
   },
   {
     "id": "a-quiet-place",
@@ -468,7 +480,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Terrifying creature jump scares and bloody wound scenes can be skipped."
+    "filterSummary": "Terrifying creature jump scares and bloody wound scenes can be skipped.",
+    "tmdbId": 447332
   },
   {
     "id": "into-the-spider-verse",
@@ -505,7 +518,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Stylized comic book animation battles and heroic action peril."
+    "filterSummary": "Stylized comic book animation battles and heroic action peril.",
+    "tmdbId": 324857
   },
   {
     "id": "up",
@@ -539,7 +553,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Heartwarming family animation; emotionally poignant opening and cartoon dog airplane dogfights."
+    "filterSummary": "Heartwarming family animation; emotionally poignant opening and cartoon dog airplane dogfights.",
+    "tmdbId": 14160
   },
   {
     "id": "forrest-gump",
@@ -573,7 +588,8 @@ const MOVIES_DATABASE = [
       "nudity": "Mild",
       "substances": "Moderate"
     },
-    "filterSummary": "Filters available for Vietnam war combat, drug use scenes, brief nudity, and language."
+    "filterSummary": "Filters available for Vietnam war combat, drug use scenes, brief nudity, and language.",
+    "tmdbId": 13
   },
   {
     "id": "the-shawshank-redemption",
@@ -608,7 +624,8 @@ const MOVIES_DATABASE = [
       "nudity": "Mild",
       "substances": "Mild"
     },
-    "filterSummary": "Filters strong prison profanity, guard brutality, and prison assault references so viewers can enjoy this #1 rated drama."
+    "filterSummary": "Filters strong prison profanity, guard brutality, and prison assault references so viewers can enjoy this #1 rated drama.",
+    "tmdbId": 278
   },
   {
     "id": "chef",
@@ -643,7 +660,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Cleaned up by muting frequent kitchen F-bombs, turning it into a wholesome, feel-good family food road trip."
+    "filterSummary": "Cleaned up by muting frequent kitchen F-bombs, turning it into a wholesome, feel-good family food road trip.",
+    "tmdbId": 212778
   },
   {
     "id": "pulp-fiction",
@@ -678,7 +696,8 @@ const MOVIES_DATABASE = [
       "nudity": "Moderate",
       "substances": "Severe"
     },
-    "filterSummary": "Extensively filterable for graphic violence, drug overdoses, sexual assault scene, and heavy profanity."
+    "filterSummary": "Extensively filterable for graphic violence, drug overdoses, sexual assault scene, and heavy profanity.",
+    "tmdbId": 680
   },
   {
     "id": "the-avengers",
@@ -715,7 +734,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Filters available for alien invasion destruction, superhero violence, and mild profanity."
+    "filterSummary": "Filters available for alien invasion destruction, superhero violence, and mild profanity.",
+    "tmdbId": 24428
   },
   {
     "id": "the-fellowship-of-the-ring",
@@ -753,7 +773,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Zero profanity or nudity; filters allow softening of scary Orc battles and decapitations for younger kids."
+    "filterSummary": "Zero profanity or nudity; filters allow softening of scary Orc battles and decapitations for younger kids.",
+    "tmdbId": 120
   },
   {
     "id": "star-wars-a-new-hope",
@@ -790,7 +811,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Classic space adventure; cantina scuffle and charred skeleton scene are filterable."
+    "filterSummary": "Classic space adventure; cantina scuffle and charred skeleton scene are filterable.",
+    "tmdbId": 11
   },
   {
     "id": "the-matrix",
@@ -823,7 +845,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Filters martial arts gun battles, bloody lobby sequence, and profanity to make it PG-13 friendly."
+    "filterSummary": "Filters martial arts gun battles, bloody lobby sequence, and profanity to make it PG-13 friendly.",
+    "tmdbId": 603
   },
   {
     "id": "the-lion-king",
@@ -860,7 +883,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "G-rated Disney masterpiece. Mild wildebeest stampede peril."
+    "filterSummary": "G-rated Disney masterpiece. Mild wildebeest stampede peril.",
+    "tmdbId": 8587
   },
   {
     "id": "the-godfather",
@@ -894,7 +918,8 @@ const MOVIES_DATABASE = [
       "nudity": "Mild",
       "substances": "Moderate"
     },
-    "filterSummary": "Filters mob hits, horse head in bed scene, toll booth shooting, and period profanity."
+    "filterSummary": "Filters mob hits, horse head in bed scene, toll booth shooting, and period profanity.",
+    "tmdbId": 238
   },
   {
     "id": "se7en",
@@ -929,7 +954,8 @@ const MOVIES_DATABASE = [
       "nudity": "Mild",
       "substances": "None"
     },
-    "filterSummary": "Heavy murder crime scenes, grisly crime photos, and intense language can be filtered."
+    "filterSummary": "Heavy murder crime scenes, grisly crime photos, and intense language can be filtered.",
+    "tmdbId": 807
   },
   {
     "id": "wall-e",
@@ -965,7 +991,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Wholesome G-rated masterpiece with visual storytelling suitable for any age."
+    "filterSummary": "Wholesome G-rated masterpiece with visual storytelling suitable for any age.",
+    "tmdbId": 10681
   },
   {
     "id": "ratatouille",
@@ -1001,7 +1028,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Delightful for all ages; mild shotgun discharge in opening and wine tasting."
+    "filterSummary": "Delightful for all ages; mild shotgun discharge in opening and wine tasting.",
+    "tmdbId": 2062
   },
   {
     "id": "spirited-away",
@@ -1038,7 +1066,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Surreal spirit world transformations (parents turning into pigs, No-Face eating monsters) can be skipped for small children."
+    "filterSummary": "Surreal spirit world transformations (parents turning into pigs, No-Face eating monsters) can be skipped for small children.",
+    "tmdbId": 129
   },
   {
     "id": "stand-by-me",
@@ -1072,7 +1101,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Moderate"
     },
-    "filterSummary": "Kids' swearing, smoking, and the famous pie-eating barf-o-rama scene are completely filterable."
+    "filterSummary": "Kids' swearing, smoking, and the famous pie-eating barf-o-rama scene are completely filterable.",
+    "tmdbId": 235
   },
   {
     "id": "parasite",
@@ -1107,7 +1137,8 @@ const MOVIES_DATABASE = [
       "nudity": "Mild",
       "substances": "Mild"
     },
-    "filterSummary": "Filters violent climax, sensual couch scene, and strong language in this Oscar Best Picture winner."
+    "filterSummary": "Filters violent climax, sensual couch scene, and strong language in this Oscar Best Picture winner.",
+    "tmdbId": 496243
   },
   {
     "id": "avatar",
@@ -1142,7 +1173,8 @@ const MOVIES_DATABASE = [
       "nudity": "Mild",
       "substances": "Mild"
     },
-    "filterSummary": "Filters sci-fi gun battles, alien animal attacks, Na'vi ritual mating, and mild swearing."
+    "filterSummary": "Filters sci-fi gun battles, alien animal attacks, Na'vi ritual mating, and mild swearing.",
+    "tmdbId": 19995
   },
   {
     "id": "dune",
@@ -1180,7 +1212,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Sword fights, giant sandworm attacks, and brief disturbing visions can be filtered."
+    "filterSummary": "Sword fights, giant sandworm attacks, and brief disturbing visions can be filtered.",
+    "tmdbId": 438631
   },
   {
     "id": "across-the-spider-verse",
@@ -1218,7 +1251,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Visual spectacular animation; mild cartoon combat and emotional parent-teen tension."
+    "filterSummary": "Visual spectacular animation; mild cartoon combat and emotional parent-teen tension.",
+    "tmdbId": 569094
   },
   {
     "id": "oppenheimer",
@@ -1256,7 +1290,8 @@ const MOVIES_DATABASE = [
       "nudity": "Moderate",
       "substances": "Moderate"
     },
-    "filterSummary": "Very popular on VidAngel to remove the full-frontal intimate scenes while keeping the historic drama intact."
+    "filterSummary": "Very popular on VidAngel to remove the full-frontal intimate scenes while keeping the historic drama intact.",
+    "tmdbId": 872585
   },
   {
     "id": "alien",
@@ -1290,7 +1325,8 @@ const MOVIES_DATABASE = [
       "nudity": "Mild",
       "substances": "Mild"
     },
-    "filterSummary": "Filters the iconic chestburster gore, acid blood scenes, and strong profanity."
+    "filterSummary": "Filters the iconic chestburster gore, acid blood scenes, and strong profanity.",
+    "tmdbId": 348
   },
   {
     "id": "gladiator",
@@ -1326,7 +1362,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Zero profanity or sexuality; extensive filters for decapitations and colosseum bloodletting."
+    "filterSummary": "Zero profanity or sexuality; extensive filters for decapitations and colosseum bloodletting.",
+    "tmdbId": 98
   },
   {
     "id": "her",
@@ -1361,7 +1398,8 @@ const MOVIES_DATABASE = [
       "nudity": "Moderate",
       "substances": "Mild"
     },
-    "filterSummary": "Filters sexually explicit audio phone scenes, brief nudity, and language."
+    "filterSummary": "Filters sexually explicit audio phone scenes, brief nudity, and language.",
+    "tmdbId": 152601
   },
   {
     "id": "eternal-sunshine",
@@ -1396,7 +1434,8 @@ const MOVIES_DATABASE = [
       "nudity": "Mild",
       "substances": "Moderate"
     },
-    "filterSummary": "Filters strong language, suggestive scenes, and marijuana use."
+    "filterSummary": "Filters strong language, suggestive scenes, and marijuana use.",
+    "tmdbId": 38
   },
   {
     "id": "ferris-bueller",
@@ -1428,7 +1467,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Filters some 80s swearing and Principal Rooney's slapstick humiliations."
+    "filterSummary": "Filters some 80s swearing and Principal Rooney's slapstick humiliations.",
+    "tmdbId": 9377
   },
   {
     "id": "the-incredibles",
@@ -1465,7 +1505,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Superhero action peril, explosions, and mild comic book violence."
+    "filterSummary": "Superhero action peril, explosions, and mild comic book violence.",
+    "tmdbId": 9806
   },
   {
     "id": "coco",
@@ -1501,7 +1542,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Family friendly Day of the Dead celebration; skeleton imagery and emotional family reconciliation."
+    "filterSummary": "Family friendly Day of the Dead celebration; skeleton imagery and emotional family reconciliation.",
+    "tmdbId": 354912
   },
   {
     "id": "titanic",
@@ -1536,7 +1578,8 @@ const MOVIES_DATABASE = [
       "nudity": "Moderate",
       "substances": "Mild"
     },
-    "filterSummary": "Extremely popular for filtering: removes the nude sketching portrait and car scene, and tones down ship disaster panic."
+    "filterSummary": "Extremely popular for filtering: removes the nude sketching portrait and car scene, and tones down ship disaster panic.",
+    "tmdbId": 597
   },
   {
     "id": "soul",
@@ -1576,7 +1619,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Wonderful existential family film about passions and living life to the fullest."
+    "filterSummary": "Wonderful existential family film about passions and living life to the fullest.",
+    "tmdbId": 508442
   },
   {
     "id": "the-martian",
@@ -1614,7 +1658,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Filters strong swearing (F-bombs) and surgical self-stapling scene on Mars."
+    "filterSummary": "Filters strong swearing (F-bombs) and surgical self-stapling scene on Mars.",
+    "tmdbId": 286217
   },
   {
     "id": "paddington-2",
@@ -1651,7 +1696,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Universal acclaim, pure wholesome joy for the entire family."
+    "filterSummary": "Universal acclaim, pure wholesome joy for the entire family.",
+    "tmdbId": 346648
   },
   {
     "id": "the-sixth-sense",
@@ -1685,7 +1731,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Filters ghostly jump scares, bloody head wounds, and eerie suspense moments."
+    "filterSummary": "Filters ghostly jump scares, bloody head wounds, and eerie suspense moments.",
+    "tmdbId": 745
   },
   {
     "id": "whiplash",
@@ -1717,7 +1764,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Filters Fletcher's nonstop verbal abuse and severe cursing so audiences can focus on the incredible musical performances."
+    "filterSummary": "Filters Fletcher's nonstop verbal abuse and severe cursing so audiences can focus on the incredible musical performances.",
+    "tmdbId": 244786
   },
   {
     "id": "the-grand-budapest-hotel",
@@ -1757,7 +1805,8 @@ const MOVIES_DATABASE = [
       "nudity": "Mild",
       "substances": "Mild"
     },
-    "filterSummary": "Filters quirky violence (severed fingers), brief painting nudity, and eccentric profanity."
+    "filterSummary": "Filters quirky violence (severed fingers), brief painting nudity, and eccentric profanity.",
+    "tmdbId": 120467
   },
   {
     "id": "raiders-of-the-lost-ark",
@@ -1791,7 +1840,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Famous face-melting Ark climax and airplane propeller fight can be softened for younger children."
+    "filterSummary": "Famous face-melting Ark climax and airplane propeller fight can be softened for younger children.",
+    "tmdbId": 85
   },
   {
     "id": "top-gun-maverick",
@@ -1827,7 +1877,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "A huge hit on VidAngel: mutes occasional strong language; aerial dogfight combat remains thrilling."
+    "filterSummary": "A huge hit on VidAngel: mutes occasional strong language; aerial dogfight combat remains thrilling.",
+    "tmdbId": 361743
   },
   {
     "id": "casablanca",
@@ -1863,7 +1914,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Timeless golden age classic with virtually no objectionable content beyond social cigarette smoking."
+    "filterSummary": "Timeless golden age classic with virtually no objectionable content beyond social cigarette smoking.",
+    "tmdbId": 289
   },
   {
     "id": "singin-in-the-rain",
@@ -1897,7 +1949,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Pure musical joy, clean and delightful for audiences of all ages."
+    "filterSummary": "Pure musical joy, clean and delightful for audiences of all ages.",
+    "tmdbId": 872
   },
   {
     "id": "monty-python-holy-grail",
@@ -1932,7 +1985,8 @@ const MOVIES_DATABASE = [
       "nudity": "Mild",
       "substances": "None"
     },
-    "filterSummary": "Filters slapstick dismemberment (Black Knight) and cheeky British humor (Castle Anthrax)."
+    "filterSummary": "Filters slapstick dismemberment (Black Knight) and cheeky British humor (Castle Anthrax).",
+    "tmdbId": 762
   },
   {
     "id": "the-sound-of-music",
@@ -1968,7 +2022,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "A beloved family staple with iconic songs; gentle and clean for all generations."
+    "filterSummary": "A beloved family staple with iconic songs; gentle and clean for all generations.",
+    "tmdbId": 15121
   },
   {
     "id": "get-out",
@@ -2004,7 +2059,8 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "Mild"
     },
-    "filterSummary": "Filters profanity, psychological hypnosis distress, and bloody escape sequence."
+    "filterSummary": "Filters profanity, psychological hypnosis distress, and bloody escape sequence.",
+    "tmdbId": 419430
   },
   {
     "id": "inside-out",
@@ -2045,10 +2101,7 @@ const MOVIES_DATABASE = [
       "nudity": "None",
       "substances": "None"
     },
-    "filterSummary": "Masterful animated exploration of emotional health; completely family safe."
+    "filterSummary": "Masterful animated exploration of emotional health; completely family safe.",
+    "tmdbId": 150540
   }
 ];
-
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { MOVIES_DATABASE };
-}
